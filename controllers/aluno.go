@@ -41,7 +41,7 @@ func GetAlunoByName(c *gin.Context) {
 	nome := c.Params.ByName("nome")
 
 	var aluno models.Aluno
-	database.DB.Where("Nome LIKE ?", nome).First(&aluno)
+	database.DB.Where(models.Aluno{Nome: nome}).First(&aluno)
 
 	if aluno.ID == 0 {
 		c.JSON(http.StatusNotFound, gin.H{
@@ -66,6 +66,15 @@ func PostAluno(c *gin.Context) {
 		return
 	}
 
+	validate := models.AlunoValidate(&aluno)
+
+	if validate != nil {
+		c.JSON(http.StatusBadRequest, gin.H{
+			"error": validate.Error()})
+
+		return
+	}
+
 	database.DB.Create(&aluno)
 
 	c.JSON(http.StatusOK, aluno)
@@ -78,7 +87,8 @@ func DeleteAlunoById(c *gin.Context) {
 	var aluno models.Aluno
 	database.DB.Delete(&aluno, id)
 
-	c.JSON(http.StatusOK, aluno)
+	c.JSON(http.StatusOK, gin.H{
+		"Message": "Aluno não encontrado"})
 }
 
 func PatchAluno(c *gin.Context) {
@@ -97,7 +107,27 @@ func PatchAluno(c *gin.Context) {
 		return
 	}
 
+	validate := models.AlunoValidate(&aluno)
+
+	if validate != nil {
+		c.JSON(http.StatusBadRequest, gin.H{
+			"error": validate.Error()})
+
+		return
+	}
+
 	database.DB.Model(&aluno).UpdateColumns(aluno)
 
 	c.JSON(http.StatusOK, aluno)
+}
+
+func AlunoPageIndex(c *gin.Context) {
+
+	var alunos []models.Aluno
+	database.DB.Find(&alunos)
+
+	c.HTML(http.StatusOK, "index.html", gin.H{
+		"alunos": alunos,
+	})
+
 }

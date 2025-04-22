@@ -8,9 +8,12 @@ import (
 func HandlerRequests() {
 
 	r := gin.Default()
+	r.LoadHTMLGlob("templates/*")
 
+	// Saudação
 	r.GET("/:nome", controllers.Saudacao)
 
+	// Aluno
 	r.GET("/aluno", controllers.GetAlunos)
 	r.GET("/aluno/:id", controllers.GetAlunoById)
 	r.GET("/aluno/nome/:nome", controllers.GetAlunoByName)
@@ -18,5 +21,9 @@ func HandlerRequests() {
 	r.DELETE("/aluno/:id", controllers.DeleteAlunoById)
 	r.PATCH("/aluno/:id", controllers.PatchAluno)
 
+	// Pages
+	r.GET("/aluno/index", controllers.AlunoPageIndex)
+
+	r.NoRoute(controllers.PageNotFound)
 	r.Run(":8000")
 }
