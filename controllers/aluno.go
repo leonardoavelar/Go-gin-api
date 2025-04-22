@@ -6,8 +6,20 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/leonardoavelar/Go-gin-api/database"
 	"github.com/leonardoavelar/Go-gin-api/models"
+	_ "github.com/swaggo/swag/example/celler/httputil"
 )
 
+// GetAlunos 	godoc
+// @Sumary 		Consulta todos os alunos cadastrados
+// @Description get json
+// @Tags 		Aluno
+// @Accept 		json
+// @Produce 	json
+// @Success 	200 {object} []models.Aluno
+// @Failure 	400 {object} httputil.HTTPError
+// @Failure 	404 {object} httputil.HTTPError
+// @Failure 	500 {object} httputil.HTTPError
+// @Router 		/aluno [get]
 func GetAlunos(c *gin.Context) {
 
 	var alunos []models.Aluno
@@ -18,6 +30,18 @@ func GetAlunos(c *gin.Context) {
 		"data": alunos})
 }
 
+// GetAlunoById	godoc
+// @Sumary 		Consulta um  aluno por Id
+// @Description get json
+// @Tags 		Aluno
+// @Accept 		json
+// @Produce 	json
+// @Param		id 	path 	 int true "Aluno ID"
+// @Success 	200 {object} models.Aluno
+// @Failure 	400 {object} httputil.HTTPError
+// @Failure 	404 {object} httputil.HTTPError
+// @Failure 	500 {object} httputil.HTTPError
+// @Router 		/aluno/{id} [get]
 func GetAlunoById(c *gin.Context) {
 
 	id := c.Params.ByName("id")
@@ -36,6 +60,18 @@ func GetAlunoById(c *gin.Context) {
 		"data": aluno})
 }
 
+// GetAlunoByName
+// @Sumary 			Consulta um aluno por Nome
+// @Description 	get json
+// @Tags 			Aluno
+// @Accept 			json
+// @Produce 		json
+// @Param			nome path 	 string true "Aluno Nome"
+// @Success 		200 {object} models.Aluno
+// @Failure 		400 {object} httputil.HTTPError
+// @Failure 		404 {object} httputil.HTTPError
+// @Failure 		500 {object} httputil.HTTPError
+// @Router 			/aluno/nome/{nome} [get]
 func GetAlunoByName(c *gin.Context) {
 
 	nome := c.Params.ByName("nome")
@@ -54,6 +90,17 @@ func GetAlunoByName(c *gin.Context) {
 		"data": aluno})
 }
 
+// PostAluno 	godoc
+// @Sumary 		Cadastra novo aluno
+// @Description post json
+// @Tags 		Aluno
+// @Accept 		json
+// @Produce 	json
+// @Param		aluno body 	 models.Aluno true "Aluno"
+// @Success 	200 {object} models.Aluno
+// @Failure 	400 {object} httputil.HTTPError
+// @Failure 	500 {object} httputil.HTTPError
+// @Router 		/aluno [post]
 func PostAluno(c *gin.Context) {
 
 	var aluno models.Aluno
@@ -80,6 +127,17 @@ func PostAluno(c *gin.Context) {
 	c.JSON(http.StatusOK, aluno)
 }
 
+// DeleteAlunoById	godoc
+// @Sumary 			Exclui aluno por Id
+// @Description 	delete json
+// @Tags 			Aluno
+// @Accept 			json
+// @Produce 		json
+// @Param			id 	path 	 int true "Aluno ID"
+// @Success 		200 {object} string
+// @Failure 		400 {object} httputil.HTTPError
+// @Failure 		500 {object} httputil.HTTPError
+// @Router 			/aluno/{id} [delete]
 func DeleteAlunoById(c *gin.Context) {
 
 	id := c.Params.ByName("id")
